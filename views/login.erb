@@ -1,0 +1,16 @@
+<h1>Login Page</h1>
+<p>Enter Username and Password</p>
+<form action="/login" method="post">
+  <div>
+    <label for="username">Username: <input type="text" name="username"></label>
+  </div>
+  <div>
+    <label for="password">Password: <input type="text" name="password"></label>
+  </div>
+  <div>
+    <input type="submit" value="Sign In">
+  </div>
+  <div id="signin-error">
+    <p><%=@error%></p>
+  </div>
+</form>
