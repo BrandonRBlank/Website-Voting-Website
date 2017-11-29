@@ -44,7 +44,7 @@ end
 # and the password as the second.  NOTE THAT 1 IS THE FIRST INDEX OF
 # DATABASE ENTRIES, NOT 0!
 def AccessEntry(index)
-  [User.get(index).username, User.get(index).password]
+  [User.get(index).username, User.get(index).password, User.get(index).role]
 end
 
 # Returns a string array with size [N, 2] containing all N elements in
