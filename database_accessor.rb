@@ -14,13 +14,14 @@ class User
   property :id       , Serial
   property :username , String
   property :password , String
+  property :role     , String
 end
 
 # Adds a single entry given a username and password.  Note that
 # the method will return true if the addition was successful
 # and false if it was not.
-def AddEntry(username, password)
-  user = User.new username: username, password: password
+def AddEntry(username, password, role)
+  user = User.new username: username, password: password, role: role
   user.save
 end
 
@@ -35,7 +36,7 @@ def AddEntriesFromCSV(filename = 'database/exampleDBSource.csv', addToExisting)
   strArr = CSV.read filename
 
   strArr.each do |s|
-    AddEntry s[0], s[1]
+    AddEntry s[0], s[1], s[2]
   end
 end
 
@@ -52,7 +53,7 @@ def AccessAll()
   strArray = []
 
   User.all.each_with_index do |s, i|
-    strArray[i] = [s.username, s.password]
+    strArray[i] = [s.username, s.password, s.role]
   end
 
   strArray
