@@ -1,12 +1,14 @@
 # set :environment, :production
 require 'sinatra'
 require 'bcrypt' # for password encryption
-require 'data_mapper' # Not used yet, cant get DB to work on my local
+# require 'data_mapper' # Not used yet, cant get DB to work on my local
+require './database_accessor.rb'
 
 enable :sessions
 
 # temp array to act as db for my testing
 temp_db = {}
+vote = 0
 
 helpers do
 
@@ -83,4 +85,27 @@ end
 get '/logout' do
   session[:username] = nil
   redirect '/'
+end
+
+get '/submissions' do
+  @item = "test"
+  @value = 0
+  erb :Vote
+end
+
+post '/submissions' do
+  if params.keys[0] == 'up'
+    vote = vote + params[:up].to_s.to_i
+  end
+  if params.keys[0] == 'down'
+    vote = vote + params[:down].to_s.to_i
+  end
+  @value = vote
+  @item = "test"
+  erb :Vote
+end
+
+get '/test' do
+  # send_file File.read('\content\bootstrap project\bootstrap.html')
+  send_file '\content\bootstrap project\bootstrap.html'
 end
