@@ -2,7 +2,7 @@
 
 TODO:
 
-- [ ] Your web app, must store usernames and passwords in an SQL database.
+- [x] Your web app, must store usernames and passwords in an SQL database.
 - [x] The passwords must be salted and hashed.
 - [ ] There needs to be at least 2 roles - one for students allowing them to vote, and one for instructors/tas.
 - [ ] There must be a way to upload a list (CSV) of users, their passwords, and roles.
