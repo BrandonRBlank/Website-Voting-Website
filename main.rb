@@ -2,6 +2,8 @@
 require 'sinatra'
 require 'bcrypt'
 require 'sqlite3'
+require 'zip'
+# require 'FileUtils'
 
 enable :sessions
 
@@ -9,10 +11,11 @@ vote = 0
 
 database = SQLite3::Database.new("database/UserData.database")
 database.execute("CREATE TABLE IF NOT EXISTS UserData (
-                            id STRING PRIMARY KEY,
-                            username STRING UNIQUE,
-                            password STRING,
-                            role INTEGER);")
+                            id STRING   PRIMARY KEY,
+                            username    STRING UNIQUE,
+                            password    STRING,
+                            role        INTEGER,
+                            voteID      STRING);")
 
 helpers do
 
@@ -21,6 +24,23 @@ helpers do
       return false
     else
       return true
+    end
+  end
+
+  def admin?
+    if session[:id] == 2
+      return true
+    else
+      return false
+    end
+  end
+
+  def not_voted?
+    print session[:voted]
+    if session[:voted] == "nil"
+      return true
+    else
+      return false
     end
   end
 
@@ -36,10 +56,6 @@ get '/' do
 end
 
 post '/' do
-  File.open('public/uploads/' + params['myFile'][:filename], "w") do |f|
-    f.write(params['myFile'][:tempfile].read)
-  end
-  @uploaded = "File successfully uploaded"
   erb :HomePage
 end
 
@@ -57,14 +73,22 @@ post '/signup' do
     pw_hash = BCrypt::Engine.hash_secret(params[:password], pw_salt)
   end
 
+  if params[:role] == 'on'
+    role = 2
+  else
+    role = 1
+  end
+
   begin
-    database.execute("INSERT INTO UserData VALUES(?,?,?,?)", pw_salt, params[:username], pw_hash, "0")
+    database.execute("INSERT INTO UserData VALUES(?,?,?,?,?)", pw_salt, params[:username], pw_hash, role, "nil")
   rescue SQLite3::ConstraintException
     @error = "Username already taken"
     erb :signup
   else
     @user = params[:username]
     session[:username] = params[:username]
+    session[:id] = role
+    session[:voted] = "nil"
 
     erb :HomePage
   end
@@ -85,8 +109,12 @@ post '/login' do
          else
            pw_db = database.execute("SELECT password FROM UserData WHERE username=?", params[:username])
            salt_db = database.execute("SELECT id FROM UserData WHERE username=?", params[:username])
+           role = database.execute("SELECT role FROM UserData WHERE username=?", params[:username])
+           vote = database.execute("SELECT voteID FROM UserData WHERE username=?", params[:username])
            if pw_db[0][0] == BCrypt::Engine.hash_secret(params[:password], salt_db[0][0])
              session[:username] = params[:username]
+             session[:id] = role[0][0]
+             session[:voted] = vote
              @user = params[:username]
              erb :HomePage
            else
@@ -99,6 +127,7 @@ end
 
 get '/logout' do
   session[:username] = nil
+  session[:id] = nil
   redirect '/'
 end
 
@@ -109,23 +138,61 @@ get '/submissions' do
   else
     @item = "test"
     @value = 0
+    @voteID = "TEST ID NEED TO BE RANDOM" # needs to be random/sequential for each website
     erb :Vote
   end
 end
 
 post '/submissions' do
   if params.keys[0] == 'up'
-    vote = vote + params[:up].to_s.to_i
-  end
-  if params.keys[0] == 'down'
-    vote = vote + params[:down].to_s.to_i
+    vote = vote + 1
+    database.execute("UPDATE UserData SET voteID=? WHERE username=?", params[:up], session[:username])
+    session[:voted] = params[:up]
   end
   @value = vote
   @item = "test"
+  @voteID = "TEST ID NEED TO BE RANDOM"
   erb :Vote
 end
 
 get '/test' do
   # send_file File.read('\content\bootstrap project\bootstrap.html')
-  send_file '\content\bootstrap project\bootstrap.html'
+  send_file 'public/content/bootstrap project/bootstrap.html'
+end
+
+get '/upload' do
+  erb :upload
+end
+
+post '/upload' do
+  if params['myFile'][:type] == "application/vnd.ms-excel"
+    File.open('public/uploads/CSV/' + params['myFile'][:filename], "w") do |f|
+      f.write(params['myFile'][:tempfile].read)
+    end
+    @uploaded = "CSV File Successfully Uploaded"
+  end
+  if params['myFile'][:type] == "application/octet-stream"
+    File.open('public/uploads/ZIP/' + params['myFile'][:filename], "w") do |f|
+      f.write(params['myFile'][:tempfile].read)
+    end
+
+    Zip::File.open('public/uploads/ZIP/' + params['myFile'][:filename]) { |zip_file|
+      zip_file.each { |f|
+        f_path=File.join("public/content", f.name)
+        FileUtils.mkdir_p(File.dirname(f_path))
+        zip_file.extract(f, f_path) unless File.exist?(f_path)
+      }
+    }
+    @uploaded = "ZIP File Successfully Uploaded"
+  end
+  erb :upload
+end
+
+get '/report' do
+  @arr = database.execute("SELECT username,voteID FROM UserData")
+  erb :report
+end
+
+post '/report' do
+  send_file'public/uploads/CSV/exampleDBSource.csv', :type => 'application/csv', :disposition => 'attachment'
 end
