@@ -1,0 +1,19 @@
+<div id="table-container">
+  <table style="width:50%" id="vote-table">
+    <tr>
+      <th>User</th>
+      <th>Vote</th>
+    </tr>
+    <% @arr.each do |g| %>
+      <tr>
+        <td><%=g[0]%></td>
+        <td><%=g[1]%></td>
+      </tr>
+    <% end %>
+  </table>
+  <div id="download-report">
+    <form action="/report" method="post">
+      <input type="submit" value="Download Report">
+    </form>
+  </div>
+</div>

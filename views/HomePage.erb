@@ -1,10 +1,14 @@
 <% if login? %>
     <h1>Welcome <%=@user%></h1>
-    <div id="upload-form">
-      <form action="/" method="post" enctype="multipart/form-data">
-        <input type="file" name="myFile">
-        <input type="submit" value="Upload">
-        <p><%=@uploaded%></p>
-      </form>
-    </div>
+    <% if admin? %>
+        <div id="upload-form">
+          <h2><a href="/upload">Upload Files</a></h2>
+        </div>
+        <div id="vote-report">
+          <h2><a href="/report">View Voting Report</a></h2>
+        </div>
+        <div id="download-report">
+          <p>PLACEHOLDER FOR DOWNLOAD OF CSV VOTING REPORT</p>
+        </div>
+    <% end %>
 <% end %>

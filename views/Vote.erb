@@ -1,23 +1,19 @@
 <iframe src="/<%=@item%>" height="500" width="1700"></iframe>
 
-<div id="vote-container">
-  <form action="/submissions" method="post" id="upVote" name="upVote">
-    <div id="up-voter">
-      <div>
-        <input type="hidden" name="up" value="">
-        <a href="#" onclick="vote_up();">Vote Up</a>
+<% if not_voted? %>
+    <% if not admin? %>
+      <div id="vote-container">
+        <form action="/submissions" method="post" id="upVote" name="upVote">
+          <div id="up-voter">
+            <div>
+              <input type="hidden" name="up" value="<%=@voteID%>">
+              <a href="#" onclick="vote_up();">Vote Up</a>
+            </div>
+          </div>
+        </form>
       </div>
-    </div>
-  </form>
-  <form action="/submissions" method="post" id="downVote" name="downVote">
-    <div id="down-voter">
-      <div>
-        <input type="hidden" name="down" value="">
-        <a href="#" onclick="vote_down();">Vote Down</a>
-      </div>
-    </div>
-  </form>
-</div>
+    <% end %>
+<% end %>
 
 <div>
   <h2>Current score is: <%=@value%></h2>
@@ -25,11 +21,7 @@
 
 <script type="text/javascript" charset="utf-8">
     function vote_up() {
-        document.upVote.up.value = 1;
         document.forms["upVote"].submit();
     }
-    function vote_down() {
-        document.downVote.down.value = -1;
-        document.forms["downVote"].submit();
-    }
+
 </script>
