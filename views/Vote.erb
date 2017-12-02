@@ -1,27 +1,63 @@
-<iframe src="/<%=@item%>" height="500" width="1700"></iframe>
+<div id="main-container">
+  <% @item.each do |name| %>
+    <iframe src="/<%=name[0]%>" height="500" width="1700"></iframe>
+    <div id="main-vote-container">
+      <% if not_voted1? %>
+          <% if not admin? %>
+              <div id="vote-container1">
+                <form action="/submissions" method="post" id="upVote1" name="upVote1">
+                  <div id="up-voter1">
+                    <div>
+                      <input type="hidden" name="one" value="<%=name[1]%>">
+                      <a href="#" onclick="vote_up1();">Vote 1st</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+          <% end %>
+      <% end %>
 
-<% if not_voted? %>
-    <% if not admin? %>
-      <div id="vote-container">
-        <form action="/submissions" method="post" id="upVote" name="upVote">
-          <div id="up-voter">
-            <div>
-              <input type="hidden" name="up" value="<%=@voteID%>">
-              <a href="#" onclick="vote_up();">Vote Up</a>
-            </div>
-          </div>
-        </form>
-      </div>
-    <% end %>
-<% end %>
+      <% if not_voted2? %>
+          <% if not admin? %>
+              <div id="vote-container2">
+                <form action="/submissions" method="post" id="upVote2" name="upVote2">
+                  <div id="up-voter2">
+                    <div>
+                      <input type="hidden" name="two" value="<%=name[1]%>">
+                      <a href="#" onclick="vote_up2();">Vote 2nd</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+          <% end %>
+      <% end %>
 
-<div>
-  <h2>Current score is: <%=@value%></h2>
+      <% if not_voted3? %>
+          <% if not admin? %>
+              <div id="vote-container3">
+                <form action="/submissions" method="post" id="upVote3" name="upVote3">
+                  <div id="up-voter3">
+                    <div>
+                      <input type="hidden" name="three" value="<%=name[1]%>">
+                      <a href="#" onclick="vote_up3();">Vote 3rd</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+          <% end %>
+      <% end %>
+    </div>
+  <% end %>
 </div>
 
 <script type="text/javascript" charset="utf-8">
-    function vote_up() {
-        document.forms["upVote"].submit();
+    function vote_up1() {
+        document.forms["upVote1"].submit();
     }
-
+    function vote_up2() {
+        document.forms["upVote2"].submit();
+    }
+    function vote_up3() {
+        document.forms["upVote3"].submit();
+    }
 </script>
