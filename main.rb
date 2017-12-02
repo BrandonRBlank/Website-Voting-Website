@@ -3,6 +3,7 @@ require 'sinatra'
 require 'bcrypt'
 require 'sqlite3'
 require 'zip'
+require 'csv'
 # require 'FileUtils'
 
 enable :sessions
@@ -166,7 +167,27 @@ end
 
 post '/upload' do
   if params['myFile'][:type] == "application/vnd.ms-excel"
-    File.open('public/uploads/CSV/' + params['myFile'][:filename], "w") do |f|
+
+    # BEGIN CODING CHANGES -----------------------------------------------------
+    # FName placed on one line.
+    fname = 'public/uploads/CSV/' + params['myFile'][:filename]
+
+    # CSV Row Format:  strArr[i] => ['Username', 'Password', 'Role #']
+    strArr = CSV.read fname
+
+    database.execute("DELETE FROM Userdata")
+
+    # Add all elements from CSV to Database. Make sure that .csv file does not
+    # Contain blank spaces!
+    strArr.each do |s|
+      pw_salt = BCrypt::Engine.generate_salt
+      pw_hash = BCrypt::Engine.hash_secret(s[1], pw_salt)
+      database.execute("INSERT INTO UserData VALUES(?,?,?,?,?)", pw_salt,
+                       s[0], pw_hash, s[2], "nil")
+    end
+    # END CODING CHANGES -------------------------------------------------------
+
+    File.open(fname, "w") do |f|
       f.write(params['myFile'][:tempfile].read)
     end
     @uploaded = "CSV File Successfully Uploaded"
