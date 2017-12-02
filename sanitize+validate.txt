@@ -1,0 +1,42 @@
+# Place at the beginning of post '/login'
+
+# Sanitize + validate username + password. -----------------------------------
+originalUName = params[:username].clone
+originalPwd = params[:password].clone
+
+params[:username].gsub! /[']/, ''
+params[:password].gsub! /[']/, ''
+
+isDataValid = (originalUName == params[:username] &&
+    originalPwd == params[:password])
+
+unless isDataValid
+  # puts 'You just entered quotes.'
+  @error = "Username or Password are invalid."
+  params[:username] = ''
+  params[:password] = ''
+  erb :login
+end
+# End Sanitization + Validation ----------------------------------------------
+
+# Place at the beginning of post '/signup'
+
+# Sanitize + validate username + password. -----------------------------------
+originalUName = params[:username].clone
+originalPwd = params[:password].clone
+
+params[:username].gsub! /[']/, ''
+params[:password].gsub! /[']/, ''
+
+isDataValid = (originalUName == params[:username] &&
+    originalPwd == params[:password])
+
+unless isDataValid
+  # puts 'You just entered quotes.'
+  @error = "Username or Password are invalid."
+  params[:username] = ''
+  params[:password] = ''
+  erb :login
+end
+# End Sanitization + Validation ----------------------------------------------
+
