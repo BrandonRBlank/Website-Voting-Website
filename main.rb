@@ -4,6 +4,7 @@ require 'bcrypt'
 require 'sqlite3'
 require 'zip'
 require 'csv'
+require 'sequel'
 # require 'FileUtils'
 
 enable :sessions
@@ -167,12 +168,14 @@ end
 
 post '/upload' do
   if params['myFile'][:type] == "application/vnd.ms-excel"
-
-    # BEGIN CODING CHANGES -----------------------------------------------------
-    # FName placed on one line.
     fname = 'public/uploads/CSV/' + params['myFile'][:filename]
 
+    File.open(fname, "w") do |f|
+      f.write(params['myFile'][:tempfile].read)
+    end
+    # BEGIN CODING CHANGES -----------------------------------------------------
     # CSV Row Format:  strArr[i] => ['Username', 'Password', 'Role #']
+
     strArr = CSV.read fname
 
     database.execute("DELETE FROM Userdata")
@@ -187,9 +190,6 @@ post '/upload' do
     end
     # END CODING CHANGES -------------------------------------------------------
 
-    File.open(fname, "w") do |f|
-      f.write(params['myFile'][:tempfile].read)
-    end
     @uploaded = "CSV File Successfully Uploaded"
   end
   if params['myFile'][:type] == "application/octet-stream"
@@ -210,10 +210,17 @@ post '/upload' do
 end
 
 get '/report' do
-  @arr = database.execute("SELECT username,voteID FROM UserData")
+  @arr = database.execute("SELECT username,voteID FROM UserData WHERE role NOT LIKE 2")
   erb :report
 end
 
 post '/report' do
+  items = database.execute("SELECT username,password,role FROM UserData")
+  File.open('public/uploads/CSV/test.csv', 'w') do |f|
+    items.each do |data|
+      f << data.to_csv(:force_quotes => true, :skip_blanks => true).gsub('\r\n', '\n')
+    end
+  end
+
   send_file'public/uploads/CSV/exampleDBSource.csv', :type => 'application/csv', :disposition => 'attachment'
 end
