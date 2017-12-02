@@ -216,11 +216,11 @@ end
 
 post '/report' do
   items = database.execute("SELECT username,password,role FROM UserData")
-  File.open('public/uploads/CSV/test.csv', 'w') do |f|
+  File.open('public/uploads/CSV/data.csv', 'w') do |f|
     items.each do |data|
       f << data.to_csv(:force_quotes => true, :skip_blanks => true).gsub('\r\n', '\n')
     end
   end
 
-  send_file'public/uploads/CSV/exampleDBSource.csv', :type => 'application/csv', :disposition => 'attachment'
+  send_file'public/uploads/CSV/data.csv', :type => 'application/csv', :disposition => 'attachment'
 end
