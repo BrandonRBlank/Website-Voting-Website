@@ -1,23 +1,31 @@
-<div id="table-container">
-  <table style="width:50%" id="vote-table">
-    <tr>
-      <th>User</th>
-      <th>Vote 1</th>
-      <th>Vote 2</th>
-      <th>Vote 3</th>
-    </tr>
-    <% @arr.each do |g| %>
-      <tr>
-        <td><%=g[0]%></td>
-        <td><%=g[1]%></td>
-        <td><%=g[2]%></td>
-        <td><%=g[3]%></td>
-      </tr>
-    <% end %>
-  </table>
-  <div id="download-report">
-    <form action="/report" method="post">
-      <input type="submit" value="Download Report">
-    </form>
+
+<div class="container">
+  <div class="panel panel-default">
+  <div class="panel-heading">Report</div>
+  <div class="panel-body">
+    <div id="table-container">
+      <table style="width:50%" id="vote-table">
+        <tr>
+          <th>User</th>
+          <th>Vote 1</th>
+          <th>Vote 2</th>
+          <th>Vote 3</th>
+        </tr>
+        <% @arr.each do |g| %>
+          <tr>
+            <td><%=g[0]%></td>
+            <td><%=g[1]%></td>
+            <td><%=g[2]%></td>
+            <td><%=g[3]%></td>
+          </tr>
+        <% end %>
+      </table>
+      <div id="download-report">
+        <form action="/report" method="post">
+          <input type="submit" value="Download Report">
+        </form>
+      </div>
+    </div>
   </div>
+</div>
 </div>

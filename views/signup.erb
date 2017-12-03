@@ -1,19 +1,27 @@
-<p>Enter Username and Password</p>
-<form action="/signup" method="post">
-  <div>
-    <label for="username">Username: <input type="text" name="username"></label>
+
+<div class="container">
+  <div class="panel panel-default">
+  <div class="panel-heading">Signup</div>
+  <div class="panel-body">
+    <p>Enter Username and Password</p>
+    <form action="/signup" method="post">
+      <div>
+        <label for="username">Username: <input type="text" name="username"></label>
+      </div>
+      <div>
+        <label for="password">Password: <input type="text" name="password"></label>
+      </div>
+      <div>
+        <input type="checkbox" id="roleBox" name="role">
+        <label for="roleBox">Instructor or TA?</label>
+      </div>
+      <div>
+        <input type="submit" value="Sign Up">
+      </div>
+      <div id="signup-error">
+        <p><%=@error%></p>
+      </div>
+    </form>
   </div>
-  <div>
-    <label for="password">Password: <input type="text" name="password"></label>
-  </div>
-  <div>
-    <input type="checkbox" id="roleBox" name="role">
-    <label for="roleBox">Instructor or TA?</label>
-  </div>
-  <div>
-    <input type="submit" value="Sign Up">
-  </div>
-  <div id="signup-error">
-    <p><%=@error%></p>
-  </div>
-</form>
+</div>
+</div>

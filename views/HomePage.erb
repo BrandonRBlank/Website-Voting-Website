@@ -1,14 +1,10 @@
-<% if login? %>
-    <h1>Welcome <%=@user%></h1>
-    <% if admin? %>
-        <div id="upload-form">
-          <h2><a href="/upload">Upload Files</a></h2>
-        </div>
-        <div id="vote-report">
-          <h2><a href="/report">View Voting Report</a></h2>
-        </div>
-        <div id="download-report">
-          <p>PLACEHOLDER FOR DOWNLOAD OF CSV VOTING REPORT</p>
-        </div>
+<div class="container">
+  <div class="panel panel-default">
+  <div class="panel-heading">Home</div>
+  <div class="panel-body">
+    <% if login? %>
+        <h1>Welcome <%=@user%></h1>
     <% end %>
-<% end %>
+    </div>
+</div>
+</div>

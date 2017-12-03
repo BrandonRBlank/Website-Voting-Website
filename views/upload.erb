@@ -1,7 +1,14 @@
-<div id="upload-container">
-  <form action="/upload" method="post" enctype="multipart/form-data">
-    <input type="file" name="myFile">
-    <input type="submit" value="Upload">
-    <p><%=@uploaded%></p>
-  </form>
+<div class="container">
+  <div class="panel panel-default">
+  <div class="panel-heading">Upload</div>
+  <div class="panel-body">
+    <div id="upload-container">
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="myFile">
+        <input type="submit" value="Upload">
+        <p><%=@uploaded%></p>
+      </form>
+    </div>
+  </div>
+</div>
 </div>
