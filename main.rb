@@ -125,27 +125,27 @@ post '/login' do
   if params[:username].to_s.empty? or params[:password].to_s.empty?
     @error = "Enter Username and Password"
     return erb :login
-    else if name.empty?
+  else if name.empty?
+         @error = "Incorrect Username or Password"
+         return erb :login
+       else
+         pw_db = database.execute("SELECT password FROM UserData WHERE username=?", params[:username])
+         salt_db = database.execute("SELECT id FROM UserData WHERE username=?", params[:username])
+         role = database.execute("SELECT role FROM UserData WHERE username=?", params[:username])
+         vote = database.execute("SELECT vote1,vote2,vote3 FROM UserData WHERE username=?", params[:username])
+         if pw_db[0][0] == BCrypt::Engine.hash_secret(params[:password], salt_db[0][0])
+           session[:username] = params[:username]
+           session[:id] = role[0][0]
+           session[:voted1] = vote[0][0]
+           session[:voted2] = vote[0][1]
+           session[:voted3] = vote[0][2]
+           @user = params[:username]
+           return erb :HomePage
+         else
            @error = "Incorrect Username or Password"
            return erb :login
-         else
-           pw_db = database.execute("SELECT password FROM UserData WHERE username=?", params[:username])
-           salt_db = database.execute("SELECT id FROM UserData WHERE username=?", params[:username])
-           role = database.execute("SELECT role FROM UserData WHERE username=?", params[:username])
-           vote = database.execute("SELECT vote1,vote2,vote3 FROM UserData WHERE username=?", params[:username])
-           if pw_db[0][0] == BCrypt::Engine.hash_secret(params[:password], salt_db[0][0])
-             session[:username] = params[:username]
-             session[:id] = role[0][0]
-             session[:voted1] = vote[0][0]
-             session[:voted2] = vote[0][1]
-             session[:voted3] = vote[0][2]
-             @user = params[:username]
-             return erb :HomePage
-           else
-             @error = "Incorrect Username or Password"
-             return erb :login
-           end
          end
+       end
   end
 end
 
@@ -172,7 +172,7 @@ get '/submissions' do
       i += 1
     end
   rescue
-      puts ""
+    puts ""
   end
   order = 1 + rand(fsub.length) # try to randomize, not working yet
 
@@ -180,20 +180,20 @@ get '/submissions' do
     @error = "You need to sign up to view submissions"
     return erb :signup
   else if $first
-    $displayArr = Array.new(i) { Array.new(4) }
-    i -= 1
-    while i != -1 do
-      $displayArr[i][0] = "view/" + fsub[i].values[0].to_s
-      $displayArr[i][1] = fsub[i].values[0]
-      $displayArr[i][2] = fsub[i].values[1]
-      i -= 1
-    end
-    $first = false
-    @item = $displayArr
-    return erb :Vote
-  else
-    @item = $displayArr
-    return erb :Vote
+         $displayArr = Array.new(i) { Array.new(4) }
+         i -= 1
+         while i != -1 do
+           $displayArr[i][0] = "view/" + fsub[i].values[0].to_s
+           $displayArr[i][1] = fsub[i].values[0]
+           $displayArr[i][2] = fsub[i].values[1]
+           i -= 1
+         end
+         $first = false
+         @item = $displayArr
+         return erb :Vote
+       else
+         @item = $displayArr
+         return erb :Vote
        end
   end
 end
