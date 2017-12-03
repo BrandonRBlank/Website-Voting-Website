@@ -1,113 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>VoterBoi</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-    body {
-        background-image: url("bkg.jpg");
-        background-color: #cccccc;
-    }
-  </style>
-</head>
-<body>
-
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/HomePage">VoterBoi</a>
-      </div>
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="/HomePage">Home</a></li>
-        <li><a href="/vote">Vote</a></li>
-        <li><a href="/report">Report</a></li>
-        <li><a href="/upload">Upload</a></li>
-        <li><a href="/submissions">Submissions</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
+<div id="main-container">
+  <% @item.each do |name| %>
+    <iframe src="/<%=name[0]%>" height="500" width="1700"></iframe>
+    <div id="score-container">
+      <h2>Current Score: <%=name[2]%></h2>
+      <label><%=name[1]%></label>
     </div>
-  </nav>
-
-
-
-
-<div class="container">
-  <div class="panel panel-default">
-  <div class="panel-heading">Vote</div>
-  <div class="panel-body">
-    <div id="main-container">
-      <% @item.each do |name| %>
-        <iframe src="/<%=name[0]%>" height="500" width="1700"></iframe>
-        <div id="main-vote-container">
-          <% if not_voted1? %>
-              <% if not admin? %>
-                  <div id="vote-container1">
-                    <form action="/submissions" method="post" id="upVote1" name="upVote1">
-                      <div id="up-voter1">
-                        <div>
-                          <input type="hidden" name="one" value="<%=name[1]%>">
-                          <a href="#" onclick="vote_up1();">Vote 1st</a>
-                        </div>
-                      </div>
-                    </form>
+    <div id="main-vote-container">
+      <% if not_voted1? %>
+          <% if not admin? %>
+              <div id="vote-container1">
+                <form action="/submissions" method="post" id="upVote1" name="<%=name[1]%>1">
+                  <div id="up-voter1">
+                    <div>
+                      <input type="hidden" name="select" value="1">
+                      <button name="name" value="<%=name[1]%>">Vote 1st</button>
+                    </div>
                   </div>
-              <% end %>
+                </form>
+              </div>
           <% end %>
-
-          <% if not_voted2? %>
-              <% if not admin? %>
-                  <div id="vote-container2">
-                    <form action="/submissions" method="post" id="upVote2" name="upVote2">
-                      <div id="up-voter2">
-                        <div>
-                          <input type="hidden" name="two" value="<%=name[1]%>">
-                          <a href="#" onclick="vote_up2();">Vote 2nd</a>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-              <% end %>
-          <% end %>
-
-          <% if not_voted3? %>
-              <% if not admin? %>
-                  <div id="vote-container3">
-                    <form action="/submissions" method="post" id="upVote3" name="upVote3">
-                      <div id="up-voter3">
-                        <div>
-                          <input type="hidden" name="three" value="<%=name[1]%>">
-                          <a href="#" onclick="vote_up3();">Vote 3rd</a>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-              <% end %>
-          <% end %>
-        </div>
       <% end %>
+
+      <% if not_voted2? %>
+          <% if not admin? %>
+              <div id="vote-container2">
+                <form action="/submissions" method="post" id="upVote2" name="<%=name[1]%>2">
+                  <div id="up-voter2">
+                    <div>
+                      <input type="hidden" name="select" value="2">
+                      <button name="name" value="<%=name[1]%>">Vote 2nd</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+          <% end %>
+      <% end %>
+
+      <% if not_voted3? %>
+          <% if not admin? %>
+              <div id="vote-container3">
+                <form action="/submissions" method="post" id="upVote3" name="<%=name[1]%>3">
+                  <div id="up-voter3">
+                    <div>
+                      <input type="hidden" name="select" value="3">
+                      <button name="name" value="<%=name[1]%>">Vote 3rd</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+          <% end %>
+      <% end %>
+      <br>
     </div>
-  </div>
-
+  <% end %>
 </div>
-
-</body>
-</html>
-
-<script type="text/javascript" charset="utf-8">
-    function vote_up1() {
-        document.forms["upVote1"].submit();
-    }
-    function vote_up2() {
-        document.forms["upVote2"].submit();
-    }
-    function vote_up3() {
-        document.forms["upVote3"].submit();
-    }
-</script>

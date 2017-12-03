@@ -1,56 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>VoterBoi</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-  body {
-      background-image: url("bkg.jpg");
-      background-color: #cccccc;
-  }
-  </style>
-</head>
-<body>
-
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/HomePage">VoterBoi</a>
-      </div>
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="/HomePage">Home</a></li>
-        <li><a href="/vote">Vote</a></li>
-        <li><a href="/report">Report</a></li>
-        <li><a href="/upload">Upload</a></li>
-        <li><a href="/submissions">Submissions</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
-  </nav>
-
-
-
-
-<div class="container">
-  <div class="panel panel-default">
-  <div class="panel-heading">Upload</div>
-  <div class="panel-body">
-    <div id="upload-container">
-      <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="myFile">
-        <input type="submit" value="Upload">
-        <p><%=@uploaded%></p>
-      </form>
-    </div>
-  </div>
+<div id="upload-container">
+  <form action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="myFile">
+    <input type="submit" value="Upload">
+    <p><%=@uploaded%></p>
+  </form>
 </div>
-
-</body>
-</html>

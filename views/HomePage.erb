@@ -1,64 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>VoterBoi</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-    body {
-        background-image: url("bkg.jpg");
-        background-color: #cccccc;
-    }
-  </style>
-
-</head>
-<body>
-
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/HomePage">VoterBoi</a>
-      </div>
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="/HomePage">Home</a></li>
-        <li><a href="/vote">Vote</a></li>
-        <li><a href="/report">Report</a></li>
-        <li><a href="/upload">Upload</a></li>
-        <li><a href="/submissions">Submissions</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
-  </nav>
-
-
-
-
-<div class="container">
-  <div class="panel panel-default">
-  <div class="panel-heading">Home</div>
-  <div class="panel-body">
-    <% if login? %>
-        <h1>Welcome <%=@user%></h1>
-        <% if admin? %>
-            <div id="upload-form">
-              <h2><a href="/upload">Upload Files</a></h2>
-            </div>
-            <div id="vote-report">
-              <h2><a href="/report">View Voting Report</a></h2>
-            </div>
-            <div id="download-report">
-              <p>PLACEHOLDER FOR DOWNLOAD OF CSV VOTING REPORT</p>
-            </div>
-        <% end %>
+<% if login? %>
+    <h1>Welcome <%=@user%></h1>
+    <% if admin? %>
+        <div id="upload-form">
+          <h2><a href="/upload">Upload Files</a></h2>
+        </div>
+        <div id="vote-report">
+          <h2><a href="/report">View Voting Report</a></h2>
+        </div>
+        <div id="download-report">
+          <p>PLACEHOLDER FOR DOWNLOAD OF CSV VOTING REPORT</p>
+        </div>
     <% end %>
-    </div>
-</div>
-
-</body>
-</html>
+<% end %>
