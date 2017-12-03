@@ -1,10 +1,8 @@
-# set :environment, :production
 require 'sinatra'
 require 'bcrypt'
 require 'sqlite3'
 require 'zip'
 require 'csv'
-require 'sequel'
 require 'fileutils'
 
 enable :sessions
@@ -174,7 +172,6 @@ get '/submissions' do
   rescue
     puts ""
   end
-  order = 1 + rand(fsub.length) # try to randomize, not working yet
 
   if session[:username].nil?
     @error = "You need to sign up to view submissions"
