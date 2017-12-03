@@ -13,25 +13,24 @@
         background-color: #cccccc;
     }
   </style>
-
 </head>
 <body>
 
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="/HomePage">VoterBoi</a>
+        <a class="navbar-brand" href="HomePage.html">VoterBoi</a>
       </div>
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/HomePage">Home</a></li>
-        <li><a href="/vote">Vote</a></li>
-        <li><a href="/report">Report</a></li>
-        <li><a href="/upload">Upload</a></li>
+        <li class="active"><a href="HomePage.html">Home</a></li>
+        <li><a href="vote.html">Vote</a></li>
+        <li><a href="report.html">Report</a></li>
+        <li><a href="upload.html">Upload</a></li>
         <li><a href="/submissions">Submissions</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li><a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
       </ul>
     </div>
   </nav>
@@ -41,23 +40,28 @@
 
 <div class="container">
   <div class="panel panel-default">
-  <div class="panel-heading">Home</div>
+  <div class="panel-heading">Report</div>
   <div class="panel-body">
-    <% if login? %>
-        <h1>Welcome <%=@user%></h1>
-        <% if admin? %>
-            <div id="upload-form">
-              <h2><a href="/upload">Upload Files</a></h2>
-            </div>
-            <div id="vote-report">
-              <h2><a href="/report">View Voting Report</a></h2>
-            </div>
-            <div id="download-report">
-              <p>PLACEHOLDER FOR DOWNLOAD OF CSV VOTING REPORT</p>
-            </div>
+    <div id="table-container">
+      <table style="width:50%" id="vote-table">
+        <tr>
+          <th>User</th>
+          <th>Vote</th>
+        </tr>
+        <% @arr.each do |g| %>
+          <tr>
+            <td><%=g[0]%></td>
+            <td><%=g[1]%></td>
+          </tr>
         <% end %>
-    <% end %>
+      </table>
+      <div id="download-report">
+        <form action="/report" method="post">
+          <input type="submit" value="Download Report">
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
 </body>
