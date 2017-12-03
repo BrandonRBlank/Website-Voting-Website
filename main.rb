@@ -87,7 +87,7 @@ end
 post '/signup' do
   if params[:username].to_s.empty? or params[:password].to_s.empty?
     @error = "Username or Password have to be filled"
-    erb :signup
+    return erb :signup
   else
     pw_salt = BCrypt::Engine.generate_salt
     pw_hash = BCrypt::Engine.hash_secret(params[:password], pw_salt)
@@ -103,7 +103,7 @@ post '/signup' do
     database.execute("INSERT INTO UserData VALUES(?,?,?,?,?,?,?)", pw_salt, params[:username], pw_hash, role, "nil", "nil", "nil")
   rescue SQLite3::ConstraintException
     @error = "Username already taken"
-    erb :signup
+    return erb :signup
   else
     @user = params[:username]
     session[:username] = params[:username]
@@ -112,7 +112,7 @@ post '/signup' do
     session[:voted2] = "nil"
     session[:voted3] = "nil"
 
-    erb :HomePage
+    return erb :HomePage
   end
 end
 
@@ -124,10 +124,10 @@ post '/login' do
   name = database.execute("SELECT username FROM UserData WHERE username=?", params[:username])
   if params[:username].to_s.empty? or params[:password].to_s.empty?
     @error = "Enter Username and Password"
-    erb :login
+    return erb :login
     else if name.empty?
            @error = "Incorrect Username or Password"
-           erb :login
+           return erb :login
          else
            pw_db = database.execute("SELECT password FROM UserData WHERE username=?", params[:username])
            salt_db = database.execute("SELECT id FROM UserData WHERE username=?", params[:username])
@@ -140,10 +140,10 @@ post '/login' do
              session[:voted2] = vote[0][1]
              session[:voted3] = vote[0][2]
              @user = params[:username]
-             erb :HomePage
+             return erb :HomePage
            else
              @error = "Incorrect Username or Password"
-             erb :login
+             return erb :login
            end
          end
   end
@@ -178,7 +178,7 @@ get '/submissions' do
 
   if session[:username].nil?
     @error = "You need to sign up to view submissions"
-    erb :signup
+    return erb :signup
   else if $first
     $displayArr = Array.new(i) { Array.new(4) }
     i -= 1
@@ -190,10 +190,10 @@ get '/submissions' do
     end
     $first = false
     @item = $displayArr
-    erb :Vote
+    return erb :Vote
   else
     @item = $displayArr
-    erb :Vote
+    return erb :Vote
        end
   end
 end
@@ -233,7 +233,7 @@ post '/submissions' do
     end
   end
   @item = $displayArr
-  erb :Vote
+  return erb :Vote
 end
 
 get '/view/:id' do |id|
@@ -294,12 +294,12 @@ post '/upload' do
   rescue
     @uploaded = "Upload Valid File Type (.csv or .zip)"
   end
-  erb :upload
+  return erb :upload
 end
 
 get '/report' do
   @arr = database.execute("SELECT username,vote1,vote2,vote3 FROM UserData WHERE role NOT LIKE 2")
-  erb :report
+  return erb :report
 end
 
 post '/report' do
